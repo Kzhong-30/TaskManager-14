@@ -25,7 +25,9 @@ ChartJS.register(
 );
 
 const StatsPage = () => {
-  const { tasks, sessions, settings } = useAppStore();
+  const tasks = useAppStore((s) => s.tasks);
+  const sessions = useAppStore((s) => s.sessions);
+  const darkMode = useAppStore((s) => s.settings.darkMode);
 
   const stats = useMemo(() => {
     const totalTasks = tasks.length;
@@ -75,7 +77,7 @@ const StatsPage = () => {
       {
         label: '番茄数',
         data: stats.dailyPomodoros.map((d) => d.count),
-        backgroundColor: settings.darkMode
+        backgroundColor: darkMode
           ? 'rgba(239, 68, 68, 0.8)'
           : 'rgba(239, 68, 68, 0.6)',
         borderColor: 'rgb(239, 68, 68)',
@@ -85,8 +87,8 @@ const StatsPage = () => {
     ],
   };
 
-  const textColor = settings.darkMode ? '#9ca3af' : '#6b7280';
-  const gridColor = settings.darkMode ? 'rgba(75, 85, 99, 0.3)' : 'rgba(209, 213, 219, 0.5)';
+  const textColor = darkMode ? '#9ca3af' : '#6b7280';
+  const gridColor = darkMode ? 'rgba(75, 85, 99, 0.3)' : 'rgba(209, 213, 219, 0.5)';
 
   const barOptions = {
     responsive: true,

@@ -12,12 +12,11 @@ const SVG_VIEWBOX = `0 0 ${SVG_SIZE} ${SVG_SIZE}`;
 
 const PomodoroTimer = () => {
   const selectedTaskId = useAppStore((s) => s.selectedTaskId);
-  const tasks = useAppStore((s) => s.tasks);
+  const selectedTask = useAppStore((s) => s.tasks.find((t) => t.id === s.selectedTaskId));
   const pomodoroDuration = useAppStore((s) => s.settings.pomodoroDuration);
   const shortBreakDuration = useAppStore((s) => s.settings.shortBreakDuration);
   const longBreakDuration = useAppStore((s) => s.settings.longBreakDuration);
   const addPomodoroSession = useAppStore((s) => s.addPomodoroSession);
-  const selectedTask = tasks.find((t) => t.id === selectedTaskId);
 
   const [mode, setMode] = useState<TimerMode>('focus');
   const [timeLeft, setTimeLeft] = useState(pomodoroDuration);

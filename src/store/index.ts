@@ -163,7 +163,8 @@ const useAppStore = create<AppState & AppActions>()(
         }
 
         if (state.selectedTagId) {
-          tasks = tasks.filter((t) => t.tagIds.includes(state.selectedTagId!));
+          const tagId = state.selectedTagId;
+          tasks = tasks.filter((t) => t.tagIds.includes(tagId));
         }
 
         return tasks.sort((a, b) => a.order - b.order);

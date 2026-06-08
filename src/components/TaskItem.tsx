@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { GripVertical, Trash2, Edit2, Check, Clock, X, AlertCircle } from 'lucide-react';
@@ -20,6 +20,15 @@ const TaskItem = ({ task }: TaskItemProps) => {
   const { toggleTaskComplete, deleteTask, selectTask, selectedTaskId, tags } = useAppStore();
   const [isEditing, setIsEditing] = useState(false);
   const [showCompletedHint, setShowCompletedHint] = useState(false);
+  const hintTimerRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (hintTimerRef.current) {
+        clearTimeout(hintTimerRef.current);
+      }
+    };
+  }, []);
 
   const {
     attributes,
@@ -94,7 +103,8 @@ const TaskItem = ({ task }: TaskItemProps) => {
           onClick={() => {
             if (task.completed) {
               setShowCompletedHint(true);
-              setTimeout(() => setShowCompletedHint(false), 2000);
+              if (hintTimerRef.current) clearTimeout(hintTimerRef.current);
+              hintTimerRef.current = window.setTimeout(() => setShowCompletedHint(false), 2000);
             } else {
               selectTask(isSelected ? null : task.id);
             }
