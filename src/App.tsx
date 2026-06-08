@@ -7,15 +7,19 @@ import PomodoroTimer from './components/PomodoroTimer';
 import StatsPage from './components/StatsPage';
 
 function App() {
-  const { settings, currentView, mobileView, setMobileView, selectedTaskId } = useAppStore();
+  const darkMode = useAppStore((s) => s.settings.darkMode);
+  const currentView = useAppStore((s) => s.currentView);
+  const mobileView = useAppStore((s) => s.mobileView);
+  const setMobileView = useAppStore((s) => s.setMobileView);
+  const selectedTaskId = useAppStore((s) => s.selectedTaskId);
 
   useEffect(() => {
-    if (settings.darkMode) {
+    if (darkMode) {
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
     }
-  }, [settings.darkMode]);
+  }, [darkMode]);
 
   const showMobileNav = currentView === 'tasks';
 

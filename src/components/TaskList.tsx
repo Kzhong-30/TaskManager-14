@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import {
   DndContext,
   closestCenter,
@@ -22,10 +22,14 @@ import FilterBar from './FilterBar';
 import TagManager from './TagManager';
 
 const TaskList = () => {
-  const { getFilteredTasks, reorderTasks, filter, selectedTagId } = useAppStore();
+  const getFilteredTasks = useAppStore((s) => s.getFilteredTasks);
+  const reorderTasks = useAppStore((s) => s.reorderTasks);
+  const filter = useAppStore((s) => s.filter);
+  const selectedTagId = useAppStore((s) => s.selectedTagId);
+  const tasks = useAppStore((s) => s.tasks);
   const [showForm, setShowForm] = useState(false);
 
-  const filteredTasks = getFilteredTasks();
+  const filteredTasks = useMemo(() => getFilteredTasks(), [getFilteredTasks, filter, selectedTagId, tasks]);
 
   const sensors = useSensors(
     useSensor(PointerSensor),

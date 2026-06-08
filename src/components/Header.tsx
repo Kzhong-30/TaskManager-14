@@ -2,7 +2,10 @@ import { Sun, Moon, ListTodo, BarChart3 } from 'lucide-react';
 import useAppStore from '../store';
 
 const Header = () => {
-  const { settings, updateSettings, currentView, setCurrentView } = useAppStore();
+  const darkMode = useAppStore((s) => s.settings.darkMode);
+  const updateSettings = useAppStore((s) => s.updateSettings);
+  const currentView = useAppStore((s) => s.currentView);
+  const setCurrentView = useAppStore((s) => s.setCurrentView);
 
   return (
     <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4">
@@ -38,10 +41,10 @@ const Header = () => {
             统计
           </button>
           <button
-            onClick={() => updateSettings({ darkMode: !settings.darkMode })}
+            onClick={() => updateSettings({ darkMode: !darkMode })}
             className="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
           >
-            {settings.darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
           </button>
         </div>
       </div>
