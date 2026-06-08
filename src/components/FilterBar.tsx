@@ -9,7 +9,11 @@ const filters: { key: FilterType; label: string }[] = [
 ];
 
 const FilterBar = () => {
-  const { filter, setFilter, tags, selectedTagId, setSelectedTag } = useAppStore();
+  const filter = useAppStore((s) => s.filter);
+  const setFilter = useAppStore((s) => s.setFilter);
+  const tags = useAppStore((s) => s.tags);
+  const selectedTagId = useAppStore((s) => s.selectedTagId);
+  const setSelectedTag = useAppStore((s) => s.setSelectedTag);
 
   return (
     <div className="space-y-4">

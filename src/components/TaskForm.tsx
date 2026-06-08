@@ -22,7 +22,9 @@ const priorityColors: Record<Priority, string> = {
 };
 
 const TaskForm = ({ onClose, editTask }: TaskFormProps) => {
-  const { addTask, updateTask, tags } = useAppStore();
+  const addTask = useAppStore((s) => s.addTask);
+  const updateTask = useAppStore((s) => s.updateTask);
+  const tags = useAppStore((s) => s.tags);
   const [title, setTitle] = useState(editTask?.title || '');
   const [priority, setPriority] = useState<Priority>(editTask?.priority || 'medium');
   const [dueDate, setDueDate] = useState(editTask?.dueDate || new Date().toISOString().split('T')[0]);

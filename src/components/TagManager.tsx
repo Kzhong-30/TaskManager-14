@@ -14,7 +14,9 @@ const presetColors = [
 ];
 
 const TagManager = () => {
-  const { tags, addTag, deleteTag } = useAppStore();
+  const tags = useAppStore((s) => s.tags);
+  const addTag = useAppStore((s) => s.addTag);
+  const deleteTag = useAppStore((s) => s.deleteTag);
   const [isOpen, setIsOpen] = useState(false);
   const [newTagName, setNewTagName] = useState('');
   const [selectedColor, setSelectedColor] = useState(presetColors[0]);

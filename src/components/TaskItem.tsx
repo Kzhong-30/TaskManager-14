@@ -17,7 +17,11 @@ const priorityColors: Record<Priority, string> = {
 };
 
 const TaskItem = ({ task }: TaskItemProps) => {
-  const { toggleTaskComplete, deleteTask, selectTask, selectedTaskId, tags } = useAppStore();
+  const toggleTaskComplete = useAppStore((s) => s.toggleTaskComplete);
+  const deleteTask = useAppStore((s) => s.deleteTask);
+  const selectTask = useAppStore((s) => s.selectTask);
+  const selectedTaskId = useAppStore((s) => s.selectedTaskId);
+  const tags = useAppStore((s) => s.tags);
   const [isEditing, setIsEditing] = useState(false);
   const [showCompletedHint, setShowCompletedHint] = useState(false);
   const hintTimerRef = useRef<number | null>(null);
