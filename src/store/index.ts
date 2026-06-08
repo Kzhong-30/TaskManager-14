@@ -85,7 +85,10 @@ const useAppStore = create<AppState & AppActions>()(
       reorderTasks: (taskIds) =>
         set((state) => ({
           tasks: state.tasks
-            .map((task, index) => ({ ...task, order: taskIds.indexOf(task.id) }))
+            .map((task) => {
+              const newIndex = taskIds.indexOf(task.id);
+              return newIndex !== -1 ? { ...task, order: newIndex } : task;
+            })
             .sort((a, b) => a.order - b.order),
         })),
 
@@ -160,7 +163,7 @@ const useAppStore = create<AppState & AppActions>()(
         }
 
         if (state.selectedTagId) {
-          tasks = tasks.filter((t) => t.tagIds.includes(state.selectedTagId));
+          tasks = tasks.filter((t) => t.tagIds.includes(state.selectedTagId!));
         }
 
         return tasks.sort((a, b) => a.order - b.order);

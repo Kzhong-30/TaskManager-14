@@ -11,11 +11,16 @@ const SVG_CENTER = SVG_SIZE / 2;
 const SVG_VIEWBOX = `0 0 ${SVG_SIZE} ${SVG_SIZE}`;
 
 const PomodoroTimer = () => {
-  const { selectedTaskId, tasks, settings, addPomodoroSession } = useAppStore();
+  const selectedTaskId = useAppStore((s) => s.selectedTaskId);
+  const tasks = useAppStore((s) => s.tasks);
+  const pomodoroDuration = useAppStore((s) => s.settings.pomodoroDuration);
+  const shortBreakDuration = useAppStore((s) => s.settings.shortBreakDuration);
+  const longBreakDuration = useAppStore((s) => s.settings.longBreakDuration);
+  const addPomodoroSession = useAppStore((s) => s.addPomodoroSession);
   const selectedTask = tasks.find((t) => t.id === selectedTaskId);
 
   const [mode, setMode] = useState<TimerMode>('focus');
-  const [timeLeft, setTimeLeft] = useState(settings.pomodoroDuration);
+  const [timeLeft, setTimeLeft] = useState(pomodoroDuration);
   const [isRunning, setIsRunning] = useState(false);
   const intervalRef = useRef<number | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
@@ -24,14 +29,14 @@ const PomodoroTimer = () => {
     (m: TimerMode) => {
       switch (m) {
         case 'focus':
-          return settings.pomodoroDuration;
+          return pomodoroDuration;
         case 'shortBreak':
-          return settings.shortBreakDuration;
+          return shortBreakDuration;
         case 'longBreak':
-          return settings.longBreakDuration;
+          return longBreakDuration;
       }
     },
-    [settings]
+    [pomodoroDuration, shortBreakDuration, longBreakDuration]
   );
 
   const totalTime = getTotalTime(mode);
@@ -87,7 +92,7 @@ const PomodoroTimer = () => {
     } else if (timeLeft === 0 && isRunning) {
       setIsRunning(false);
       if (mode === 'focus' && selectedTaskId) {
-        addPomodoroSession(selectedTaskId, settings.pomodoroDuration);
+        addPomodoroSession(selectedTaskId, pomodoroDuration);
       }
       playNotification();
     }
@@ -97,13 +102,13 @@ const PomodoroTimer = () => {
         clearInterval(intervalRef.current);
       }
     };
-  }, [isRunning, timeLeft, mode, selectedTaskId, settings, addPomodoroSession, playNotification]);
+  }, [isRunning, timeLeft, mode, selectedTaskId, pomodoroDuration, addPomodoroSession, playNotification]);
 
   useEffect(() => {
     setMode('focus');
-    setTimeLeft(settings.pomodoroDuration);
+    setTimeLeft(pomodoroDuration);
     setIsRunning(false);
-  }, [selectedTaskId, settings.pomodoroDuration]);
+  }, [selectedTaskId, pomodoroDuration]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);

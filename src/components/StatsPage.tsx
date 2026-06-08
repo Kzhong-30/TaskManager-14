@@ -85,6 +85,9 @@ const StatsPage = () => {
     ],
   };
 
+  const textColor = settings.darkMode ? '#9ca3af' : '#6b7280';
+  const gridColor = settings.darkMode ? 'rgba(75, 85, 99, 0.3)' : 'rgba(209, 213, 219, 0.5)';
+
   const barOptions = {
     responsive: true,
     plugins: {
@@ -93,10 +96,22 @@ const StatsPage = () => {
       },
     },
     scales: {
+      x: {
+        ticks: {
+          color: textColor,
+        },
+        grid: {
+          color: gridColor,
+        },
+      },
       y: {
         beginAtZero: true,
         ticks: {
           stepSize: 1,
+          color: textColor,
+        },
+        grid: {
+          color: gridColor,
         },
       },
     },
@@ -122,6 +137,9 @@ const StatsPage = () => {
     plugins: {
       legend: {
         position: 'bottom' as const,
+        labels: {
+          color: textColor,
+        },
       },
     },
   };

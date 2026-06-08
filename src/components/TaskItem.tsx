@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { GripVertical, Trash2, Edit2, Check, Clock, X } from 'lucide-react';
+import { GripVertical, Trash2, Edit2, Check, Clock, X, AlertCircle } from 'lucide-react';
 import useAppStore from '../store';
 import { Task, Priority } from '../types';
 import TaskForm from './TaskForm';
@@ -19,6 +19,7 @@ const priorityColors: Record<Priority, string> = {
 const TaskItem = ({ task }: TaskItemProps) => {
   const { toggleTaskComplete, deleteTask, selectTask, selectedTaskId, tags } = useAppStore();
   const [isEditing, setIsEditing] = useState(false);
+  const [showCompletedHint, setShowCompletedHint] = useState(false);
 
   const {
     attributes,
@@ -89,8 +90,15 @@ const TaskItem = ({ task }: TaskItemProps) => {
         </button>
 
         <div
-          className="flex-1 cursor-pointer"
-          onClick={() => !task.completed && selectTask(isSelected ? null : task.id)}
+          className={`flex-1 ${task.completed ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+          onClick={() => {
+            if (task.completed) {
+              setShowCompletedHint(true);
+              setTimeout(() => setShowCompletedHint(false), 2000);
+            } else {
+              selectTask(isSelected ? null : task.id);
+            }
+          }}
         >
           <div className="flex items-center gap-2 mb-1">
             <div className={`w-2 h-2 rounded-full ${priorityColors[task.priority]}`} />
@@ -104,6 +112,13 @@ const TaskItem = ({ task }: TaskItemProps) => {
               {task.title}
             </h3>
           </div>
+
+          {showCompletedHint && (
+            <div className="flex items-center gap-1 mb-1 text-xs text-amber-500">
+              <AlertCircle className="w-3 h-3" />
+              已完成的任务无法开始番茄钟
+            </div>
+          )}
 
           {taskTags.length > 0 && (
             <div className="flex flex-wrap gap-1 mb-2">
